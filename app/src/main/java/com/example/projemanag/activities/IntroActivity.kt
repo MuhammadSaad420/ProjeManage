@@ -12,9 +12,9 @@ import com.example.projemanag.databinding.ActivityIntroBinding
 class IntroActivity : BaseActivity() {
     var binding: ActivityIntroBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState)
         binding = ActivityIntroBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(binding?.root)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())

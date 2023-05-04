@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import com.example.projemanag.R
 import com.example.projemanag.databinding.ActivitySignUpBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : BaseActivity() {
     var binding: ActivitySignUpBinding? = null;
@@ -40,9 +42,21 @@ class SignUpActivity : BaseActivity() {
 
     private fun registerUser() {
         if(validateUser()) {
-            val name = binding?.etName?.text
-                val email = binding?.etEmail?.text
-                    val password = binding?.etPassword?.text
+            val name = binding?.etName?.text.toString()
+                val email = binding?.etEmail?.text.toString()
+                    val password = binding?.etPassword?.text.toString()
+            showProgressDialog("Please wait...")
+            FirebaseAuth.getInstance()
+                .createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener {
+                    hideProgressDialog()
+                    if (it.isSuccessful) {
+                        Toast.makeText(this@SignUpActivity,"User created successfully",
+                        Toast.LENGTH_LONG)
+                    } else {
+                        showErrorSnackBar(it.exception!!.message!!)
+                    }
+                }
         }
     }
 
