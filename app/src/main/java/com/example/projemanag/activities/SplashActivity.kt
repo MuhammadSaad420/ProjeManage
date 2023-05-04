@@ -1,4 +1,4 @@
-package com.example.projemanag
+package com.example.projemanag.activities
 
 import android.content.Intent
 import android.graphics.Typeface
@@ -30,7 +30,7 @@ class SplashActivity : AppCompatActivity() {
         val face = Typeface.createFromAsset(applicationContext.assets, "carbon bl.ttf")
         binding?.splashTvTitle?.typeface = face
         Handler().postDelayed({
-                              startActivity(Intent(this,IntroActivity::class.java))
+                              startActivity(Intent(this, IntroActivity::class.java))
             finish()
         },2500)
     }
