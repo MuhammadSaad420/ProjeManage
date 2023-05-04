@@ -14,8 +14,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 open class BaseActivity : AppCompatActivity() {
-    var isBackPressedOnce: Boolean = false
-    var progressDialog: Dialog? = null
+    private var isBackPressedOnce: Boolean = false
+    private var progressDialog: Dialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
