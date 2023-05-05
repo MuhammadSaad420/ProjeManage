@@ -10,6 +10,8 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.example.projemanag.R
 import com.example.projemanag.databinding.ActivitySignInBinding
+import com.example.projemanag.firebase.FirestoreClass
+import com.example.projemanag.models.User
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInActivity : BaseActivity() {
@@ -48,17 +50,26 @@ class SignInActivity : BaseActivity() {
             FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener {
-                    hideProgressDialog()
                     if (it.isSuccessful) {
-                        Toast.makeText(this@SignInActivity,"User LoggedIn successfully",
-                            Toast.LENGTH_LONG).show()
-                        startActivity(Intent(this@SignInActivity,MainActivity:: class.java))
+                        signInUser()
                     } else {
+                        hideProgressDialog()
                         showErrorSnackBar(it.exception!!.message!!)
                     }
                 }
         }
     }
+
+    private fun signInUser() {
+        FirestoreClass().signInUser(this@SignInActivity)
+    }
+    fun singInSuccess(user:User) {
+        hideProgressDialog()
+        Toast.makeText(this@SignInActivity,"User LoggedIn successfully",
+            Toast.LENGTH_LONG).show()
+        startActivity(Intent(this@SignInActivity,MainActivity:: class.java))
+    }
+
     private fun validateUser(): Boolean {
         return when {
             TextUtils.isEmpty(binding?.etEmail?.text) -> {
