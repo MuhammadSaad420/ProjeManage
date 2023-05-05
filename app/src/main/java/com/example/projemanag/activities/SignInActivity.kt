@@ -1,14 +1,18 @@
 package com.example.projemanag.activities
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import com.example.projemanag.R
 import com.example.projemanag.databinding.ActivitySignInBinding
+import com.google.firebase.auth.FirebaseAuth
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : BaseActivity() {
     var binding: ActivitySignInBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +35,43 @@ class SignInActivity : AppCompatActivity() {
         }
         binding?.toolbarSignInActivity?.setNavigationOnClickListener {
             onBackPressed()
+        }
+        binding?.btnSignIn?.setOnClickListener {
+            loginUser()
+        }
+    }
+    private fun loginUser() {
+        if(validateUser()) {
+            val email = binding?.etEmail?.text.toString()
+            val password = binding?.etPassword?.text.toString()
+            showProgressDialog("Logging In...")
+            FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(email,password)
+                .addOnCompleteListener {
+                    hideProgressDialog()
+                    if (it.isSuccessful) {
+                        Toast.makeText(this@SignInActivity,"User LoggedIn successfully",
+                            Toast.LENGTH_LONG).show()
+                        startActivity(Intent(this@SignInActivity,MainActivity:: class.java))
+                    } else {
+                        showErrorSnackBar(it.exception!!.message!!)
+                    }
+                }
+        }
+    }
+    private fun validateUser(): Boolean {
+        return when {
+            TextUtils.isEmpty(binding?.etEmail?.text) -> {
+                showErrorSnackBar("Email must not be empty")
+                false
+            }
+            TextUtils.isEmpty(binding?.etPassword?.text) -> {
+                showErrorSnackBar("Password must not be empty")
+                false
+            }
+            else -> {
+                true
+            }
         }
     }
 }
