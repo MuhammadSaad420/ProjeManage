@@ -10,6 +10,7 @@ import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
 import com.example.projemanag.databinding.ActivitySplashBinding
+import com.example.projemanag.firebase.FirestoreClass
 
 class SplashActivity : AppCompatActivity() {
     var binding:ActivitySplashBinding? = null
@@ -30,7 +31,12 @@ class SplashActivity : AppCompatActivity() {
         val face = Typeface.createFromAsset(applicationContext.assets, "carbon bl.ttf")
         binding?.splashTvTitle?.typeface = face
         Handler().postDelayed({
-                              startActivity(Intent(this, IntroActivity::class.java))
+            if(FirestoreClass().getUserId().isEmpty()) {
+                startActivity(Intent(this, IntroActivity::class.java))
+            } else {
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+
             finish()
         },2500)
     }

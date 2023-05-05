@@ -36,6 +36,11 @@ class FirestoreClass {
             }
     }
     fun getUserId(): String {
-        return FirebaseAuth.getInstance().uid!!
+        var firebaseAuth = FirebaseAuth.getInstance()
+        var currentUserId = ""
+        if(firebaseAuth.uid != null) {
+            currentUserId = firebaseAuth.uid!!
+        }
+        return currentUserId
     }
 }
