@@ -1,5 +1,6 @@
 package com.example.projemanag.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +14,7 @@ import com.example.projemanag.databinding.NavHeaderMainBinding
 import com.example.projemanag.firebase.FirestoreClass
 import com.example.projemanag.models.User
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
     var binding: ActivityMainBinding? = null
@@ -58,7 +60,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Toast.makeText(this@MainActivity,"Profile selected",Toast.LENGTH_SHORT).show()
             }
             R.id.drawer_signout -> {
-                Toast.makeText(this@MainActivity,"Signout selected",Toast.LENGTH_SHORT).show()
+                FirebaseAuth.getInstance().signOut()
+                val intent = Intent(this, IntroActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
             }
         }
         return true
