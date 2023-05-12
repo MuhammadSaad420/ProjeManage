@@ -1,5 +1,6 @@
 package com.example.projemanag.firebase
 
+import android.app.Activity
 import com.example.projemanag.activities.MainActivity
 import com.example.projemanag.activities.SignInActivity
 import com.example.projemanag.activities.SignUpActivity
@@ -23,13 +24,20 @@ class FirestoreClass {
 
             }
     }
-    fun signInUser(activity: SignInActivity) {
+    fun signInUser(activity: Activity) {
         mFirestoreClass.collection("User")
             .document(getUserId())
             .get()
             .addOnSuccessListener {
                 val user = it.toObject(User::class.java)!!
-                activity.singInSuccess(user)
+                when(activity) {
+                    is SignInActivity -> {
+                        activity.singInSuccess(user)
+                    }
+                    is MainActivity -> {
+                        activity.loadUserNavigationData(user)
+                    }
+                }
             }
             .addOnFailureListener {
 
